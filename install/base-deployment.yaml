@@ -47,7 +47,7 @@ spec:
           mountPath: /var/lib/etcd
       containers:
       - name: etcd
-        image: gcr.io/etcd-development/etcd:v3.5.0
+        image: docker.io/dragonwow/etcd:v3.5.0
         args:
         - etcd
         - --data-dir=/var/lib/etcd
@@ -62,7 +62,7 @@ spec:
         - mountPath: /var/lib/etcd
           name: etcd-data
       - name: apiserver
-        image: k8s.gcr.io/kube-apiserver:v1.19.11
+        image: docker.io/dragonwow/kube-apiserver:v1.19.11
         command:
         - kube-apiserver
         - --etcd-servers=http://localhost:2379
