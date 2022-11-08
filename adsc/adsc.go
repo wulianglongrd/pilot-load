@@ -135,6 +135,7 @@ type ADSClient interface {
 var _ ADSClient = &ADSC{}
 
 // Dial connects to a ADS server, with optional MTLS authentication if a cert dir is specified.
+// url is pilotAddress
 func Dial(url string, opts *Config) (ADSClient, error) {
 	if opts.Namespace == "" {
 		opts.Namespace = "default"
@@ -241,7 +242,7 @@ func (a *ADSC) handleRecv() {
 			a.updates <- "close"
 			return
 		}
-		scope.Debugf("got message for type %v", msg.TypeUrl)
+		scope.Infof("got message for type %v", msg.TypeUrl)
 
 		listeners := []*listener.Listener{}
 		clusters := []*cluster.Cluster{}
@@ -556,6 +557,7 @@ func (a *ADSC) send(dr *discovery.DiscoveryRequest, reason string) error {
 // Watch will start watching resources, starting with CDS. Based on the CDS response
 // it will start watching RDS and CDS.
 func (a *ADSC) Watch() {
+	scope.Infof("Watch send DiscoveryRequest CDS, reason %s", ReasonInit)
 	err := a.send(&discovery.DiscoveryRequest{
 		Node:    a.node,
 		TypeUrl: resource.ClusterType,
