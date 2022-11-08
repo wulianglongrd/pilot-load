@@ -242,7 +242,7 @@ func (a *ADSC) handleRecv() {
 			a.updates <- "close"
 			return
 		}
-		scope.Infof("got message for type %v", msg.TypeUrl)
+		scope.Infof("<- got message for type %v", msg.TypeUrl)
 
 		listeners := []*listener.Listener{}
 		clusters := []*cluster.Cluster{}
@@ -551,6 +551,7 @@ func (a *ADSC) Wait(update string, to time.Duration) (string, error) {
 
 func (a *ADSC) send(dr *discovery.DiscoveryRequest, reason string) error {
 	scope.Debugf("send message for type %v (%v) for %v", dr.TypeUrl, reason, dr.ResourceNames)
+	scope.Infof("--> send message for type %v (%v)", dr.TypeUrl, reason)
 	return a.stream.Send(dr)
 }
 
