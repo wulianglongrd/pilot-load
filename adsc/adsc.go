@@ -5,6 +5,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"istio.io/istio/pilot/pkg/model"
+	"istio.io/istio/pilot/pkg/networking/util"
+	"istio.io/istio/pilot/pkg/xds"
 	"math"
 	"net"
 	"sort"
@@ -242,7 +245,9 @@ func (a *ADSC) handleRecv() {
 			a.updates <- "close"
 			return
 		}
-		scope.Infof("<- got message for type %v", msg.TypeUrl)
+
+		configSize := xds.ResourceSize(model.AnyToUnnamedResources(msg.Resources))
+		scope.Infof("<- got message for type %v, size:%s", msg.TypeUrl, util.ByteCount(configSize))
 
 		listeners := []*listener.Listener{}
 		clusters := []*cluster.Cluster{}
